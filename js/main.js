@@ -30,8 +30,166 @@
     return wrapper;
   }
 
+  function injectSectionMenu() {
+    if (!document.body) return null;
+
+    const current = pageName();
+    const sectionPages = [
+      'sobre-mi.html',
+      'proyectos.html',
+      'experiencia.html',
+      'stack.html',
+      'blog.html',
+      'contacto.html'
+    ];
+
+    if (current === 'index.html' || sectionPages.indexOf(current) === -1) return null;
+
+    const links = [
+      { href: 'index.html', label: 'Inicio' },
+      { href: 'sobre-mi.html', label: 'Sobre mi' },
+      { href: 'proyectos.html', label: 'Proyectos' },
+      { href: 'experiencia.html', label: 'Experiencia' },
+      { href: 'stack.html', label: 'Stack' },
+      { href: 'blog.html', label: 'Blog' },
+      { href: 'contacto.html', label: 'Contacto' }
+    ];
+
+    const menu = document.createElement('div');
+    menu.className = 'section-menu';
+
+    const items = links.map(function (item) {
+      const active = item.href === current ? ' aria-current="page"' : '';
+      return '<li><a href="' + item.href + '"' + active + '>' + item.label + '</a></li>';
+    }).join('');
+
+    menu.innerHTML = ''
+      + '<button class="section-menu-toggle" type="button" aria-expanded="false" aria-controls="sectionMenuPanel" aria-label="Abrir menu de secciones">'
+      + '  <span></span><span></span><span></span>'
+      + '</button>'
+      + '<div class="section-menu-overlay" hidden></div>'
+      + '<nav id="sectionMenuPanel" class="section-menu-panel" aria-label="Navegacion principal" hidden>'
+      + '  <p class="section-menu-title">Navegacion</p>'
+      + '  <ul>' + items + '</ul>'
+      + '</nav>';
+
+    const root = document.createElement('div');
+    root.className = 'section-menu-root';
+    root.appendChild(menu);
+    document.body.appendChild(root);
+    return menu;
+  }
+
   const languageSwitcher = injectLanguageSwitcher();
   const languageButtons = languageSwitcher ? languageSwitcher.querySelectorAll('.language-button') : [];
+  const sectionMenu = injectSectionMenu();
+
+  if (sectionMenu) {
+    const menuRoot = sectionMenu.parentElement;
+    const toggle = sectionMenu.querySelector('.section-menu-toggle');
+    const panel = sectionMenu.querySelector('.section-menu-panel');
+    const overlay = sectionMenu.querySelector('.section-menu-overlay');
+    const links = sectionMenu.querySelectorAll('.section-menu-panel a');
+
+    function parseMeasureToPx(value) {
+      const raw = String(value || '').trim();
+      if (!raw) return 640;
+
+      if (raw.endsWith('rem')) {
+        const rem = Number(raw.replace('rem', '').trim());
+        if (!Number.isNaN(rem)) {
+          const rootSize = Number(window.getComputedStyle(document.documentElement).fontSize.replace('px', '')) || 16;
+          return rem * rootSize;
+        }
+      }
+
+      if (raw.endsWith('px')) {
+        const px = Number(raw.replace('px', '').trim());
+        if (!Number.isNaN(px)) return px;
+      }
+
+      const fallback = Number(raw);
+      return Number.isNaN(fallback) ? 640 : fallback;
+    }
+
+    function applyFixedMenuPosition() {
+      const desktop = window.matchMedia('(min-width: 64rem)').matches;
+      const measureValue = window.getComputedStyle(document.documentElement).getPropertyValue('--measure');
+      const measurePx = parseMeasureToPx(measureValue);
+      const rightPx = desktop
+        ? Math.max(16, ((window.innerWidth - measurePx) / 2) + 16)
+        : 16;
+
+      if (menuRoot) {
+        menuRoot.style.setProperty('position', 'fixed', 'important');
+        menuRoot.style.setProperty('inset', '0', 'important');
+        menuRoot.style.setProperty('left', '0', 'important');
+        menuRoot.style.setProperty('top', '0', 'important');
+        menuRoot.style.setProperty('right', '0', 'important');
+        menuRoot.style.setProperty('bottom', '0', 'important');
+        menuRoot.style.removeProperty('height');
+        menuRoot.style.setProperty('z-index', '120', 'important');
+        menuRoot.style.setProperty('pointer-events', 'none', 'important');
+      }
+
+      sectionMenu.style.setProperty('position', 'fixed', 'important');
+      sectionMenu.style.setProperty('top', '16px', 'important');
+      sectionMenu.style.setProperty('right', rightPx + 'px', 'important');
+      sectionMenu.style.setProperty('left', 'auto', 'important');
+      sectionMenu.style.setProperty('bottom', 'auto', 'important');
+      sectionMenu.style.setProperty('transform', 'none', 'important');
+      sectionMenu.style.setProperty('z-index', '120', 'important');
+      sectionMenu.style.setProperty('pointer-events', 'auto', 'important');
+
+      panel.style.setProperty('position', 'fixed', 'important');
+      panel.style.setProperty('top', desktop ? '110px' : '72px', 'important');
+      panel.style.setProperty('right', rightPx + 'px', 'important');
+      panel.style.setProperty('left', 'auto', 'important');
+      panel.style.setProperty('bottom', 'auto', 'important');
+      panel.style.setProperty('transform', 'none', 'important');
+      panel.style.setProperty('z-index', '121', 'important');
+    }
+
+    function closeSectionMenu() {
+      sectionMenu.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+      overlay.hidden = true;
+    }
+
+    function openSectionMenu() {
+      sectionMenu.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+      overlay.hidden = false;
+      applyFixedMenuPosition();
+    }
+
+    toggle.addEventListener('click', function () {
+      if (sectionMenu.classList.contains('is-open')) {
+        closeSectionMenu();
+      } else {
+        openSectionMenu();
+      }
+    });
+
+    overlay.addEventListener('click', closeSectionMenu);
+
+    links.forEach(function (link) {
+      link.addEventListener('click', closeSectionMenu);
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && sectionMenu.classList.contains('is-open')) {
+        closeSectionMenu();
+        toggle.focus();
+      }
+    });
+
+    applyFixedMenuPosition();
+
+    window.addEventListener('resize', applyFixedMenuPosition);
+  }
 
   const i18n = {
     common: [

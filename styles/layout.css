@@ -1,6 +1,7 @@
 .site-header {
   padding: var(--space-2) var(--space-2) 0;
   text-align: center;
+  position: relative;
 }
 
 .landing {
