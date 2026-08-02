@@ -396,6 +396,15 @@
 
   var switcher = createSwitcher();
   var buttons = switcher.querySelectorAll('.mh-lang-btn');
+  var translatableNodes = null;
+  var normalizedMap = null;
+  var translationPrepared = false;
+
+  function updateButtonState(lang) {
+    buttons.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.getAttribute('data-lang') === lang));
+    });
+  }
 
   function collectTextNodes() {
     var nodes = [];
@@ -421,15 +430,21 @@
     return nodes;
   }
 
-  var translatableNodes = collectTextNodes();
+  function prepareTranslations() {
+    if (translationPrepared) return;
+    translatableNodes = collectTextNodes();
+    translationPrepared = true;
+  }
 
   function resetToSpanish() {
+    if (!translationPrepared) return;
     translatableNodes.forEach(function (entry) {
       entry.node.nodeValue = entry.es;
     });
   }
 
   function applyExactTranslations(map) {
+    if (!translationPrepared) return;
     translatableNodes.forEach(function (entry) {
       var k = keyOf(entry.es);
       if (map[k]) {
@@ -459,10 +474,7 @@
     if (lang !== 'es' && lang !== 'en') return;
 
     document.documentElement.setAttribute('lang', lang);
-
-    buttons.forEach(function (btn) {
-      btn.setAttribute('aria-pressed', String(btn.getAttribute('data-lang') === lang));
-    });
+    updateButtonState(lang);
 
     var data = dict[page];
     document.title = lang === 'en' ? data.title.en : data.title.es;
@@ -472,14 +484,20 @@
       desc.setAttribute('content', lang === 'en' ? data.description.en : data.description.es);
     }
 
-    resetToSpanish();
-
     if (lang === 'en') {
-      var normalizedMap = {};
-      Object.keys(data.exact || {}).forEach(function (k) {
-        normalizedMap[keyOf(k)] = data.exact[k];
-      });
+      prepareTranslations();
+      resetToSpanish();
+
+      if (!normalizedMap) {
+        normalizedMap = {};
+        Object.keys(data.exact || {}).forEach(function (k) {
+          normalizedMap[keyOf(k)] = data.exact[k];
+        });
+      }
+
       applyExactTranslations(normalizedMap);
+    } else {
+      resetToSpanish();
     }
 
     applyAttributeTranslations(lang, data.attrs);
@@ -507,5 +525,18 @@
     });
   });
 
-  applyLanguage(initialLang);
+  if (initialLang === 'en') {
+    updateButtonState('en');
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(function () {
+        applyLanguage('en');
+      }, { timeout: 1200 });
+    } else {
+      window.setTimeout(function () {
+        applyLanguage('en');
+      }, 0);
+    }
+  } else {
+    applyLanguage('es');
+  }
 })();
