@@ -326,7 +326,7 @@
   });
 
   function clearNavigationState() {
-    body.classList.remove('is-leaving', 'is-leaving-back', 'is-transitioning', 'is-transitioning-back');
+    body.classList.remove('is-leaving', 'is-leaving-back', 'is-transitioning', 'is-transitioning-back', 'is-entering-back');
   }
 
   function revealVisibleItemsNow() {
@@ -338,10 +338,32 @@
     });
   }
 
+  function isHistoryTraversal(event) {
+    if (event && event.persisted) return true;
+
+    const navEntries = performance.getEntriesByType('navigation');
+    if (navEntries && navEntries.length > 0) {
+      return navEntries[0].type === 'back_forward';
+    }
+
+    return false;
+  }
+
+  function runBackEntryAnimation(event) {
+    if (reduceMotion) return;
+    if (!isHistoryTraversal(event)) return;
+
+    body.classList.add('is-entering-back');
+    window.setTimeout(function () {
+      body.classList.remove('is-entering-back');
+    }, 380);
+  }
+
   clearNavigationState();
 
-  window.addEventListener('pageshow', function () {
+  window.addEventListener('pageshow', function (event) {
     clearNavigationState();
+    runBackEntryAnimation(event);
     revealVisibleItemsNow();
   });
 
