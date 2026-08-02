@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurea Maison | Decoración Premium</title>
+  <meta name="description" content="Ecommerce premium de decoración: muebles, iluminación, textiles y piezas de autor para elevar tus espacios." />
+  <style>
+    :root{
+      --bg:#f6f2ec;
+      --bg-soft:#efe8de;
+      --paper:#fffdf9;
+      --text:#2b221b;
+      --muted:#726457;
+      --gold:#b68a50;
+      --gold-dark:#8f6a3e;
+      --line:#dfd3c4;
+      --ok:#2f7d57;
+      --danger:#9f3b3b;
+      --radius:16px;
+      --shadow:0 14px 35px rgba(43,34,27,.12);
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      font-family:"Inter","Segoe UI",Roboto,Arial,sans-serif;
+      background: radial-gradient(1200px 500px at 100% -20%, #f2e7d8 0%, transparent 55%),var(--bg);
+      color:var(--text);
+      scroll-behavior:smooth;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    .container{width:min(100% - 2rem, var(--max));margin-inline:auto}
+
+    /* Top bar */
+    .topbar{
+      background:#2f271f;
+      color:#f7efe4;
+      font-size:.82rem;
+      padding:.45rem 0;
+      text-align:center;
+      letter-spacing:.2px;
+    }
+
+    /* Header */
+    header{
+      position:sticky;top:0;z-index:60;
+      backdrop-filter: blur(8px);
+      background:rgba(246,242,236,.86);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      min-height:78px;
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:1rem;
+    }
+    .nav-left,.nav-right{
+      display:flex;align-items:center;gap:1rem;
+    }
+    .nav-right{justify-content:flex-end}
+    .brand{
+      justify-self:center;
+      text-align:center;
+      line-height:1.1;
+    }
+    .brand h1{
+      font-family: "Times New Roman", Georgia, serif;
+      font-weight:600;
+      letter-spacing:.8px;
+      font-size:1.45rem;
+    }
+    .brand small{
+      color:var(--muted);
+      letter-spacing:1.5px;
+      font-size:.7rem;
+      text-transform:uppercase;
+    }
+
+    .menu{
+      display:flex;gap:1rem;align-items:center;font-size:.94rem;color:#4f4339;
+    }
+    .menu a{padding:.35rem .2rem;border-bottom:1px solid transparent}
+    .menu a:hover{border-color:#7b6857}
+
+    .icon-btn{
+      border:1px solid var(--line);
+      background:var(--paper);
+      width:40px;height:40px;border-radius:12px;
+      display:grid;place-items:center;cursor:pointer;
+      transition:.2s ease;
+    }
+    .icon-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+    .menu-toggle{display:none}
+
+    .search{
+      display:flex;align-items:center;gap:.5rem;
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:12px;padding:.45rem .7rem;
+      min-width:220px;
+    }
+    .search input{
+      border:0;background:transparent;outline:none;width:100%;
+      font:inherit;color:var(--text);
+    }
+
+    /* Hero */
+    .hero{padding:2rem 0 1.5rem}
+    .hero-grid{
+      display:grid;grid-template-columns:1.15fr .85fr;gap:1rem;
+    }
+    .hero-main,.hero-side{
+      border-radius:24px;overflow:hidden;position:relative;
+      min-height:480px;
+      box-shadow:var(--shadow);
+    }
+    .hero-main{
+      background:
+        linear-gradient(110deg, rgba(28,22,17,.62), rgba(28,22,17,.15)),
+        url('https://images.unsplash.com/photo-1616594039964-3d5d5edbcb67?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+    }
+    .hero-side{
+      background:
+        linear-gradient(180deg, rgba(28,22,17,.12), rgba(28,22,17,.45)),
+        url('https://images.unsplash.com/photo-1616627547584-bf28cee262db?auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
+    }
+
+    .hero-content{
+      position:absolute;left:2rem;bottom:2rem;color:#fff;max-width:70%;
+    }
+    .pill{
+      display:inline-block;
+      border:1px solid rgba(255,255,255,.45);
+      padding:.3rem .7rem;border-radius:999px;
+      font-size:.78rem;margin-bottom:.9rem;
+      backdrop-filter:blur(2px);
+    }
+    .hero h2{
+      font-family:"Times New Roman",Georgia,serif;
+      font-size:clamp(1.8rem,3.8vw,3rem);
+      font-weight:600;line-height:1.08;margin-bottom:.8rem;
+    }
+    .hero p{color:#f1e9df;line-height:1.6;margin-bottom:1rem}
+    .btn{
+      border:0;cursor:pointer;border-radius:12px;
+      padding:.72rem 1rem;font-weight:600;font-size:.92rem;
+      display:inline-flex;align-items:center;gap:.45rem;transition:.2s ease;
+    }
+    .btn-gold{
+      background:linear-gradient(180deg,var(--gold),var(--gold-dark));
+      color:#fff;
+      box-shadow:0 10px 25px rgba(143,106,62,.35);
+    }
+    .btn-gold:hover{transform:translateY(-1px)}
+    .btn-light{
+      background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35)
+    }
+
+    /* KPI strip */
+    .strip{padding:.8rem 0 0}
+    .strip-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;
+    }
+    .strip-card{
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:14px;padding:.85rem .9rem;
+      display:flex;gap:.7rem;align-items:center;
+    }
+    .dot{
+      width:11px;height:11px;border-radius:999px;background:var(--gold)
+    }
+    .strip-card strong{display:block;font-size:.95rem}
+    .strip-card span{font-size:.82rem;color:var(--muted)}
+
+    /* Sections */
+    section{padding:3rem 0}
+    .sec-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1rem}
+    .sec-head h3{
+      font-family:"Times New Roman",Georgia,serif;
+      font-size:clamp(1.4rem,2.4vw,2rem);
+      font-weight:600;
+    }
+    .sec-head p{color:var(--muted)}
+    .link{color:#5f4c39;font-weight:600;font-size:.9rem}
+
+    /* Categories */
+    .cats{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;
+    }
+    .cat{
+      border-radius:16px;overflow:hidden;position:relative;min-height:190px;
+      box-shadow:var(--shadow);
+    }
+    .cat::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.52));
+    }
+    .cat span{
+      position:absolute;left:1rem;bottom:1rem;color:#fff;z-index:1;
+      font-weight:600;letter-spacing:.2px
+    }
+
+    /* Products */
+    .products{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;
+    }
+    .card{
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:16px;overflow:hidden;
+      transition:.2s ease;position:relative;
+    }
+    .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+    .thumb{
+      aspect-ratio: 1 / 1;
+      background:#e8dece;
+      overflow:hidden;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .badge{
+      position:absolute;left:.7rem;top:.7rem;
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius:999px;font-size:.73rem;
+      padding:.2rem .55rem;
+    }
+    .info{padding:.85rem}
+    .title{font-size:.95rem;font-weight:600;line-height:1.35;margin-bottom:.35rem}
+    .meta{font-size:.82rem;color:var(--muted);margin-bottom:.55rem}
+    .price-row{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+    .price{font-weight:700}
+    .old{font-size:.82rem;color:#9f8f80;text-decoration:line-through;margin-left:.35rem}
+    .mini-btn{
+      border:1px solid var(--line);background:#fff;border-radius:10px;
+      padding:.38rem .55rem;font-size:.82rem;cursor:pointer;
+    }
+
+    /* Story banner */
+    .story{
+      border:1px solid var(--line);
+      background:
+        linear-gradient(100deg, rgba(38,28,20,.78), rgba(38,28,20,.55)),
+        url('https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      border-radius:24px;min-height:320px;
+      display:flex;align-items:center;
+      padding:2rem;color:#fff;
+      box-shadow:var(--shadow);
+    }
+    .story .content{max-width:620px}
+    .story h3{
+      font-family:"Times New Roman",Georgia,serif;
+      font-size:clamp(1.5rem,2.7vw,2.3rem);
+      margin-bottom:.7rem;font-weight:600;
+    }
+    .story p{color:#efe4d8;line-height:1.65;margin-bottom:1rem}
+
+    /* Newsletter + footer */
+    .newsletter{
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:18px;padding:1rem;
+      display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;
+    }
+    .newsletter p{color:var(--muted);font-size:.92rem}
+    .news-form{display:flex;gap:.55rem;flex-wrap:wrap;justify-content:flex-end}
+    .news-form input{
+      border:1px solid var(--line);background:#fff;border-radius:10px;
+      padding:.62rem .75rem;min-width:260px;font:inherit;
+    }
+
+    footer{
+      margin-top:2rem;padding:2rem 0 2.5rem;border-top:1px solid var(--line);
+      color:#6d6054;font-size:.9rem;
+    }
+    .foot{
+      display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:1rem;
+    }
+    .foot h4{font-size:.92rem;color:#4e4135;margin-bottom:.55rem}
+    .foot ul{list-style:none}
+    .foot li{margin-bottom:.35rem}
+    .subtle{font-size:.82rem;color:#887b6d;margin-top:.8rem}
+
+    /* Cart Drawer */
+    .drawer{
+      position:fixed;top:0;right:-420px;width:400px;max-width:100%;
+      height:100%;background:var(--paper);z-index:100;
+      border-left:1px solid var(--line);
+      box-shadow:-14px 0 35px rgba(0,0,0,.12);
+      transition:.25s ease;display:flex;flex-direction:column;
+    }
+    .drawer.open{right:0}
+    .drawer-head,.drawer-foot{
+      padding:1rem;border-bottom:1px solid var(--line);
+    }
+    .drawer-foot{border-bottom:0;border-top:1px solid var(--line);margin-top:auto}
+    .drawer-list{padding:1rem;display:grid;gap:.7rem;max-height:55vh;overflow:auto}
+    .item{
+      border:1px solid var(--line);border-radius:12px;padding:.6rem;
+      display:grid;grid-template-columns:62px 1fr auto;gap:.55rem;align-items:center;
+      background:#fff;
+    }
+    .item img{width:62px;height:62px;object-fit:cover;border-radius:8px}
+    .qty{
+      display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden
+    }
+    .qty button{
+      border:0;background:#f6efe6;width:24px;height:24px;cursor:pointer
+    }
+    .qty span{width:24px;text-align:center;font-size:.85rem}
+    .overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.25);
+      backdrop-filter:blur(1px);opacity:0;pointer-events:none;transition:.2s;z-index:90;
+    }
+    .overlay.show{opacity:1;pointer-events:auto}
+    .total{display:flex;justify-content:space-between;font-weight:700;margin-bottom:.8rem}
+    .msg{
+      display:none;margin-top:.6rem;padding:.55rem .7rem;border-radius:10px;
+      background:rgba(47,125,87,.12);border:1px solid rgba(47,125,87,.25);color:var(--ok);font-size:.86rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1080px){
+      .products,.cats{grid-template-columns:repeat(3,1fr)}
+      .hero-grid{grid-template-columns:1fr}
+      .hero-side{min-height:260px}
+      .hero-main{min-height:420px}
+      .foot{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 800px){
+      .menu{
+        position:absolute;left:0;right:0;top:78px;background:rgba(246,242,236,.98);
+        border-bottom:1px solid var(--line);
+        display:none;flex-direction:column;align-items:flex-start;padding:1rem;
+      }
+      .menu.show{display:flex}
+      .menu-toggle{display:grid}
+      .search{display:none}
+      .nav{grid-template-columns:auto 1fr auto}
+      .brand{justify-self:start}
+      .nav-left{display:none}
+      .strip-grid{grid-template-columns:1fr 1fr}
+      .cats,.products{grid-template-columns:repeat(2,1fr)}
+      .newsletter{grid-template-columns:1fr}
+      .news-form{justify-content:flex-start}
+      .hero-content{max-width:88%;left:1.2rem;bottom:1.2rem}
+    }
+    @media (max-width: 520px){
+      .cats,.products,.strip-grid,.foot{grid-template-columns:1fr}
+      .drawer{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">Envío premium gratuito en compras superiores a $299 • Atención concierge 24/7</div>
+
+  <header>
+    <div class="container nav">
+      <div class="nav-left">
+        <nav id="menu" class="menu">
+          <a href="#colecciones">Colecciones</a>
+          <a href="#destacados">Destacados</a>
+          <a href="#inspiracion">Inspiración</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+      </div>
+
+      <div class="brand">
+        <h1>AUREA MAISON</h1>
+        <small>Decoración Premium</small>
+      </div>
+
+      <div class="nav-right">
+        <label class="search" aria-label="Buscar productos">
+          🔎 <input id="searchInput" type="text" placeholder="Buscar lámparas, jarrones, textiles..." />
+        </label>
+        <button id="menuToggle" class="icon-btn menu-toggle" aria-label="Abrir menú">☰</button>
+        <button id="cartBtn" class="icon-btn" aria-label="Abrir carrito">🛒</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <article class="hero-main">
+          <div class="hero-content">
+            <span class="pill">Nueva Curaduría Otoño · 2026</span>
+            <h2>Convierte cada ambiente en una experiencia sensorial</h2>
+            <p>Piezas de autor, materiales nobles y diseño atemporal para proyectos residenciales y hospitality de alto nivel.</p>
+            <button class="btn btn-gold" onclick="scrollToSection('destacados')">Comprar ahora</button>
+            <button class="btn btn-light" onclick="scrollToSection('colecciones')">Ver colecciones</button>
+          </div>
+        </article>
+        <article class="hero-side"></article>
+      </div>
+    </section>
+
+    <section class="strip">
+      <div class="container strip-grid">
+        <div class="strip-card"><span class="dot"></span><div><strong>Diseño Curado</strong><span>Selección por interioristas</span></div></div>
+        <div class="strip-card"><span class="dot"></span><div><strong>Garantía Premium</strong><span>Cobertura extendida 24 meses</span></div></div>
+        <div class="strip-card"><span class="dot"></span><div><strong>Pagos Seguros</strong><span>Tarjeta, transferencia, wallet</span></div></div>
+        <div class="strip-card"><span class="dot"></span><div><strong>Entrega White-Glove</strong><span>Instalación en destino</span></div></div>
+      </div>
+    </section>
+
+    <section id="colecciones">
+      <div class="container">
+        <div class="sec-head">
+          <div>
+            <h3>Colecciones Exclusivas</h3>
+            <p>Explora categorías premium para renovar tus espacios.</p>
+          </div>
+          <a class="link" href="#">Ver todo →</a>
+        </div>
+
+        <div class="cats">
+          <a class="cat" href="#" style="background:url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;"><span>Mobiliario</span></a>
+          <a class="cat" href="#" style="background:url('https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;"><span>Iluminación</span></a>
+          <a class="cat" href="#" style="background:url('https://images.unsplash.com/photo-1616627561839-074385245ff6?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;"><span>Textiles</span></a>
+          <a class="cat" href="#" style="background:url('https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;"><span>Accesorios</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="destacados">
+      <div class="container">
+        <div class="sec-head">
+          <div>
+            <h3>Productos Destacados</h3>
+            <p>Best-sellers con disponibilidad inmediata.</p>
+          </div>
+          <a class="link" href="#">Catálogo completo →</a>
+        </div>
+
+        <div id="productsGrid" class="products"></div>
+      </div>
+    </section>
+
+    <section id="inspiracion">
+      <div class="container">
+        <article class="story">
+          <div class="content">
+            <h3>Asesoría de estilo para proyectos residenciales y contract</h3>
+            <p>Trabajamos contigo desde moodboard hasta selección final de piezas para lograr ambientes armónicos, sofisticados y funcionales.</p>
+            <button class="btn btn-gold" onclick="scrollToSection('contacto')">Solicitar asesoría</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container">
+        <div class="newsletter">
+          <div>
+            <h3 style="font-family:'Times New Roman',Georgia,serif;font-size:1.4rem;margin-bottom:.35rem;">Únete al Círculo Privado Aurea</h3>
+            <p>Acceso anticipado a lanzamientos, ediciones limitadas y beneficios exclusivos para miembros.</p>
+          </div>
+          <form id="newsForm" class="news-form">
+            <input type="email" id="newsEmail" required placeholder="tu@email.com" />
+            <button class="btn btn-gold" type="submit">Suscribirme</button>
+          </form>
+        </div>
+        <div id="newsMsg" class="msg">✅ Suscripción confirmada. Revisa tu correo para activar beneficios.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <div>
+        <h4>Aurea Maison</h4>
+        <p>Diseño interior premium para espacios con identidad.</p>
+        <p class="subtle">© <span id="year"></span> Aurea Maison. Todos los derechos reservados.</p>
+      </div>
+      <div>
+        <h4>Tienda</h4>
+        <ul>
+          <li><a href="#">Mobiliario</a></li>
+          <li><a href="#">Iluminación</a></li>
+          <li><a href="#">Decoración mural</a></li>
+          <li><a href="#">Novedades</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="#">Interior Styling</a></li>
+          <li><a href="#">Proyectos B2B</a></li>
+          <li><a href="#">Gift Concierge</a></li>
+          <li><a href="#">Garantías</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Soporte</h4>
+        <ul>
+          <li><a href="#">Envíos y devoluciones</a></li>
+          <li><a href="#">Métodos de pago</a></li>
+          <li><a href="#">Preguntas frecuentes</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Overlay + Drawer Carrito -->
+  <div id="overlay" class="overlay"></div>
+  <aside id="drawer" class="drawer" aria-label="Carrito de compras">
+    <div class="drawer-head">
+      <strong>Tu carrito</strong>
+      <p style="font-size:.85rem;color:var(--muted);margin-top:.2rem;">Piezas seleccionadas para tu espacio.</p>
+    </div>
+    <div id="drawerList" class="drawer-list"></div>
+    <div class="drawer-foot">
+      <div class="total"><span>Total</span><span id="cartTotal">$0</span></div>
+      <button class="btn btn-gold" style="width:100%">Finalizar compra</button>
+    </div>
+  </aside>
+
+  <script>
+    // Data de productos (demo)
+    const PRODUCTS = [
+      { id: 1, name: "Sillón Velluto Nórdico", category: "Mobiliario", price: 1299, oldPrice: 1499, badge: "Top Venta", image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80" },
+      { id: 2, name: "Lámpara Colgante Ámbar", category: "Iluminación", price: 389, oldPrice: 449, badge: "Nuevo", image: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80" },
+      { id: 3, name: "Jarrón Escultural Marmi", category: "Accesorios", price: 219, oldPrice: 0, badge: "Edición", image: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=900&q=80" },
+      { id: 4, name: "Set Cojines Lino Imperial", category: "Textiles", price: 179, oldPrice: 229, badge: "Oferta", image: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&w=900&q=80" },
+      { id: 5, name: "Mesa Centro Travertino", category: "Mobiliario", price: 899, oldPrice: 0, badge: "Premium", image: "https://images.unsplash.com/photo-1616594039964-3d5d5edbcb67?auto=format&fit=crop&w=900&q=80" },
+      { id: 6, name: "Espejo Orgánico Aura", category: "Accesorios", price: 329, oldPrice: 399, badge: "Nuevo", image: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=900&q=80" },
+      { id: 7, name: "Lámpara de Pie Atelier", category: "Iluminación", price: 479, oldPrice: 539, badge: "Top Venta", image: "https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=900&q=80" },
+      { id: 8, name: "Alfombra Bouclé Élite", category: "Textiles", price: 649, oldPrice: 729, badge: "Oferta", image: "https://images.unsplash.com/photo-1616627457140-7d0e98f6d7c9?auto=format&fit=crop&w=900&q=80" }
+    ];
+
+    const productsGrid = document.getElementById("productsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const yearEl = document.getElementById("year");
+
+    const drawer = document.getElementById("drawer");
+    const overlay = document.getElementById("overlay");
+    const cartBtn = document.getElementById("cartBtn");
+    const drawerList = document.getElementById("drawerList");
+    const cartTotal = document.getElementById("cartTotal");
+
+    const menu = document.getElementById("menu");
+    const menuToggle = document.getElementById("menuToggle");
+
+    const newsForm = document.getElementById("newsForm");
+    const newsMsg = document.getElementById("newsMsg");
+
+    let cart = [];
+
+    // Init
+    yearEl.textContent = new Date().getFullYear();
+    renderProducts(PRODUCTS);
+
+    // Helpers
+    function money(v){ return `$${v.toLocaleString("en-US")}`; }
+
+    function scrollToSection(id){
+      document.getElementById(id).scrollIntoView({behavior:"smooth"});
+    }
+
+    // Render productos
+    function renderProducts(list){
+      productsGrid.innerHTML = "";
+      if(!list.length){
+        productsGrid.innerHTML = `<p style="grid-column:1/-1;color:var(--muted)">No encontramos productos con ese criterio.</p>`;
+        return;
+      }
+
+      list.forEach(p => {
+        const article = document.createElement("article");
+        article.className = "card";
+        article.innerHTML = `
+          <span class="badge">${p.badge}</span>
+          <div class="thumb"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>
+          <div class="info">
+            <h4 class="title">${p.name}</h4>
+            <p class="meta">${p.category}</p>
+            <div class="price-row">
+              <div class="price">
+                ${money(p.price)}
+                ${p.oldPrice ? `<span class="old">${money(p.oldPrice)}</span>` : ""}
+              </div>
+              <button class="mini-btn" data-add="${p.id}">Añadir</button>
+            </div>
+          </div>
+        `;
+        productsGrid.appendChild(article);
+      });
+
+      // listeners add cart
+      document.querySelectorAll("[data-add]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = Number(btn.getAttribute("data-add"));
+          addToCart(id);
+        });
+      });
+    }
+
+    // Search
+    searchInput.addEventListener("input", e=>{
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = PRODUCTS.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.badge.toLowerCase().includes(q)
+      );
+      renderProducts(filtered);
+    });
+
+    // Cart logic
+    function addToCart(id){
+      const product = PRODUCTS.find(p => p.id === id);
+      const existing = cart.find(i => i.id === id);
+
+      if(existing) existing.qty += 1;
+      else cart.push({ ...product, qty: 1 });
+
+      renderCart();
+      openCart();
+    }
+
+    function changeQty(id, delta){
+      const item = cart.find(i => i.id === id);
+      if(!item) return;
+      item.qty += delta;
+      if(item.qty <= 0) cart = cart.filter(i => i.id !== id);
+      renderCart();
+    }
+
+    function renderCart(){
+      drawerList.innerHTML = "";
+      if(!cart.length){
+        drawerList.innerHTML = `<p style="color:var(--muted);font-size:.9rem">Tu carrito está vacío.</p>`;
+        cartTotal.textContent = "$0";
+        return;
+      }
+
+      cart.forEach(item=>{
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div>
+            <strong style="font-size:.9rem">${item.name}</strong>
+            <p style="font-size:.82rem;color:var(--muted)">${money(item.price)}</p>
+          </div>
+          <div>
+            <div class="qty">
+              <button data-q="${item.id}" data-d="-1">−</button>
+              <span>${item.qty}</span>
+              <button data-q="${item.id}" data-d="1">+</button>
+            </div>
+          </div>
+        `;
+        drawerList.appendChild(row);
+      });
+
+      const total = cart.reduce((acc, i)=> acc + (i.price * i.qty), 0);
+      cartTotal.textContent = money(total);
+
+      document.querySelectorAll("[data-q]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = Number(btn.getAttribute("data-q"));
+          const delta = Number(btn.getAttribute("data-d"));
+          changeQty(id, delta);
+        });
+      });
+    }
+
+    // Drawer
+    function openCart(){
+      drawer.classList.add("open");
+      overlay.classList.add("show");
+    }
+    function closeCart(){
+      drawer.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    cartBtn.addEventListener("click", openCart);
+    overlay.addEventListener("click", closeCart);
+    document.addEventListener("keydown", e => {
+      if(e.key === "Escape") closeCart();
+    });
+
+    // Mobile menu
+    menuToggle.addEventListener("click", ()=> menu.classList.toggle("show"));
+    menu.querySelectorAll("a").forEach(a=> a.addEventListener("click", ()=> menu.classList.remove("show")));
+
+    // Newsletter
+    newsForm.addEventListener("submit", e=>{
+      e.preventDefault();
+      if(!newsForm.checkValidity()){
+        newsForm.reportValidity();
+        return;
+      }
+      const email = document.getElementById("newsEmail").value.trim();
+      console.log("Suscripción:", email);
+      newsForm.reset();
+      newsMsg.style.display = "block";
+      setTimeout(()=> newsMsg.style.display = "none", 4500);
+    });
+  </script>
+  <script>
+    (function () {
+      const style = document.createElement("style");
+      style.textContent = ""
+        + ".legal-popup-overlay{position:fixed;inset:0;background:rgba(2,6,16,.68);display:grid;place-items:center;padding:1rem;z-index:9999;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}" 
+        + ".legal-popup-overlay.is-visible{opacity:1;visibility:visible}" 
+        + ".legal-popup{width:min(100%,34rem);background:#f6efe3;color:#1b1714;border:1px solid rgba(47,39,34,.25);border-radius:14px;padding:1rem 1rem .9rem;box-shadow:0 20px 40px rgba(0,0,0,.35)}" 
+        + ".legal-popup h2{margin:0 0 .45rem;font-size:1.08rem;line-height:1.3}" 
+        + ".legal-popup p{margin:0;color:#3f362f;line-height:1.55;font-size:.96rem}" 
+        + ".legal-popup-actions{margin-top:.9rem;display:flex;justify-content:flex-end}" 
+        + ".legal-popup-close{border:1px solid rgba(47,39,34,.3);background:#fff8ec;color:#1b1714;border-radius:10px;padding:.5rem .8rem;font:inherit;cursor:pointer}";
+      document.head.appendChild(style);
+
+      const overlay = document.createElement("div");
+      overlay.className = "legal-popup-overlay";
+      overlay.innerHTML = ""
+        + "<section class=\"legal-popup\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"legalPopupTitle\">"
+        + "<h2 id=\"legalPopupTitle\">Aviso de confidencialidad</h2>"
+        + "<p>Todo el contenido de esta pagina es ficticio y se presenta solo con fines demostrativos. Por acuerdos de confidencialidad (NDA), no se publican marcas, datos ni activos reales de clientes. Esta es una plantilla similar al tipo de solucion implementada.</p>"
+        + "<div class=\"legal-popup-actions\"><button type=\"button\" class=\"legal-popup-close\">Entendido</button></div>"
+        + "</section>";
+      document.body.appendChild(overlay);
+
+      const closeButton = overlay.querySelector(".legal-popup-close");
+      const dialog = overlay.querySelector(".legal-popup");
+
+      function closePopup() {
+        overlay.classList.remove("is-visible");
+      }
+
+      closeButton.addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (event) {
+        if (event.target === overlay) closePopup();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closePopup();
+      });
+
+      window.requestAnimationFrame(function () {
+        overlay.classList.add("is-visible");
+        closeButton.focus();
+      });
+
+      if (dialog) {
+        dialog.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+      }
+    })();
+  </script>
+  <script src="../js/projects-i18n.js"></script>
+</body>
+</html>

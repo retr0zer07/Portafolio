@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentia Abogados | Firma Legal</title>
+  <meta name="description" content="Sitio institucional para firma legal: derecho corporativo, litigio, laboral, fiscal y compliance." />
+  <style>
+    :root{
+      --bg:#0f1728;
+      --bg-soft:#15203a;
+      --paper:#1b2947;
+      --text:#e9eefc;
+      --muted:#a9b6d3;
+      --gold:#c7a76a;
+      --gold-dark:#a7864f;
+      --line:rgba(255,255,255,.14);
+      --ok:#22c55e;
+      --danger:#ef4444;
+      --radius:16px;
+      --shadow:0 12px 30px rgba(0,0,0,.3);
+      --max:1160px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      font-family:"Inter","Segoe UI",Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1100px 420px at 90% -10%, #243a72 0%, transparent 60%),
+        radial-gradient(900px 320px at -10% 15%, #1b2f5d 0%, transparent 60%),
+        var(--bg);
+      color:var(--text);
+      scroll-behavior:smooth;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:min(100% - 2rem, var(--max));margin-inline:auto}
+
+    /* Topbar */
+    .topbar{
+      background:#0b1222;
+      color:#c7d3ee;
+      border-bottom:1px solid var(--line);
+      text-align:center;
+      font-size:.82rem;
+      padding:.46rem .8rem;
+      letter-spacing:.2px;
+    }
+
+    /* Header */
+    header{
+      position:sticky;top:0;z-index:60;
+      backdrop-filter:blur(8px);
+      background:rgba(15,23,40,.78);
+      border-bottom:1px solid var(--line);
+    }
+
+    .nav{
+      min-height:76px;
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    }
+
+    .brand{
+      display:flex;align-items:center;gap:.75rem;font-weight:700;
+      letter-spacing:.3px;
+    }
+
+    .crest{
+      width:38px;height:38px;border-radius:10px;
+      background:linear-gradient(145deg,var(--gold),var(--gold-dark));
+      color:#1a1a1a;font-weight:800;display:grid;place-items:center;
+      box-shadow:0 8px 20px rgba(199,167,106,.35);
+    }
+
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-size:.72rem;
+      font-weight:500;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+      margin-top:.1rem;
+    }
+
+    nav.menu{
+      display:flex;gap:1.2rem;color:var(--muted);font-size:.94rem;
+    }
+    nav.menu a{border-bottom:1px solid transparent;padding:.2rem 0}
+    nav.menu a:hover{color:#fff;border-color:rgba(255,255,255,.35)}
+
+    .actions{display:flex;gap:.6rem;align-items:center}
+    .btn{
+      border:1px solid transparent;background:transparent;color:#fff;
+      border-radius:12px;padding:.66rem .95rem;font-size:.9rem;font-weight:600;
+      cursor:pointer;transition:.2s ease;display:inline-flex;align-items:center;gap:.45rem;
+    }
+    .btn-outline{border-color:var(--line)}
+    .btn-outline:hover{background:rgba(255,255,255,.05)}
+    .btn-gold{
+      background:linear-gradient(180deg,var(--gold),var(--gold-dark));
+      color:#1c1b19;border-color:transparent;
+      box-shadow:0 10px 22px rgba(199,167,106,.28);
+    }
+    .btn-gold:hover{transform:translateY(-1px)}
+    .menu-toggle{
+      display:none;width:40px;height:40px;border-radius:10px;
+      border:1px solid var(--line);background:transparent;color:#fff;cursor:pointer;
+    }
+
+    /* Hero */
+    .hero{padding:4rem 0 3rem}
+    .hero-grid{
+      display:grid;grid-template-columns:1.05fr .95fr;gap:1rem;align-items:stretch;
+    }
+
+    .hero-left{padding:.8rem .2rem}
+    .kicker{
+      display:inline-flex;align-items:center;gap:.45rem;
+      border:1px solid rgba(199,167,106,.35);
+      background:rgba(199,167,106,.12);
+      color:#e9d7b4;
+      border-radius:999px;
+      padding:.35rem .75rem;font-size:.8rem;margin-bottom:1rem;
+    }
+
+    h1{
+      font-family:"Times New Roman",Georgia,serif;
+      font-weight:600;
+      line-height:1.08;
+      font-size:clamp(2rem,4vw,3.2rem);
+      margin-bottom:.95rem;
+    }
+
+    .hero p{
+      color:var(--muted);
+      line-height:1.68;
+      max-width:62ch;
+      margin-bottom:1.25rem;
+    }
+
+    .hero-cta{display:flex;gap:.7rem;flex-wrap:wrap}
+    .mini{
+      margin-top:1rem;color:#c9d5ee;font-size:.86rem;
+      display:flex;gap:1rem;flex-wrap:wrap
+    }
+
+    .hero-right{
+      border:1px solid var(--line);
+      border-radius:20px;
+      overflow:hidden;
+      min-height:500px;
+      position:relative;
+      box-shadow:var(--shadow);
+      background:
+        linear-gradient(120deg, rgba(10,16,30,.78), rgba(10,16,30,.45)),
+        url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+    }
+
+    .hero-card{
+      position:absolute;left:1rem;right:1rem;bottom:1rem;
+      background:rgba(14,22,40,.82);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:1rem;
+      backdrop-filter:blur(4px);
+    }
+    .hero-card h4{margin-bottom:.4rem}
+    .hero-card p{color:var(--muted);font-size:.9rem;line-height:1.5}
+    .hero-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem}
+    .tag{
+      font-size:.76rem;padding:.24rem .55rem;border-radius:999px;
+      border:1px solid rgba(255,255,255,.2);color:#d8e2fb;background:rgba(255,255,255,.06);
+    }
+
+    /* Trust bar */
+    .trust{padding:0 0 2rem}
+    .trust-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;
+    }
+    .trust-item{
+      border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);
+      padding:.85rem .9rem;
+    }
+    .trust-item strong{display:block;font-size:1rem}
+    .trust-item span{color:var(--muted);font-size:.85rem}
+
+    /* Generic section */
+    section{padding:3.2rem 0}
+    .head{margin-bottom:1.2rem}
+    .head h2{
+      font-family:"Times New Roman",Georgia,serif;
+      font-size:clamp(1.45rem,2.5vw,2.1rem);
+      font-weight:600;margin-bottom:.45rem;
+    }
+    .head p{color:var(--muted)}
+
+    /* Areas */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .card{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      overflow:hidden;
+      transition:.2s ease;
+    }
+    .card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.28)}
+    .card-img{
+      height:150px;background-size:cover;background-position:center;
+      border-bottom:1px solid var(--line);
+    }
+    .card-body{padding:1rem}
+    .icon{
+      width:40px;height:40px;border-radius:11px;
+      background:rgba(199,167,106,.14);
+      border:1px solid rgba(199,167,106,.35);
+      display:grid;place-items:center;
+      margin-bottom:.7rem;font-weight:700;color:#ebd6b0;
+    }
+    .card h3{font-size:1.03rem;margin-bottom:.45rem}
+    .card p{color:var(--muted);font-size:.93rem;line-height:1.56}
+
+    /* Team */
+    .team-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;
+    }
+    .member{
+      border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03);
+    }
+    .member .photo{
+      height:260px;background-size:cover;background-position:center;
+      filter:saturate(.9);
+    }
+    .member .info{padding:.95rem}
+    .member h4{margin-bottom:.2rem}
+    .member small{color:#d8c39c;display:block;margin-bottom:.45rem}
+    .member p{color:var(--muted);font-size:.9rem;line-height:1.5}
+
+    /* CTA band */
+    .band{
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      min-height:270px;
+      background:
+        linear-gradient(105deg, rgba(11,17,30,.84), rgba(11,17,30,.52)),
+        url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      display:flex;align-items:center;padding:2rem;
+      box-shadow:var(--shadow);
+    }
+    .band h3{
+      font-family:"Times New Roman",Georgia,serif;
+      font-size:clamp(1.45rem,2.8vw,2.2rem);
+      margin-bottom:.55rem;
+    }
+    .band p{color:#cfdaef;max-width:65ch;line-height:1.62;margin-bottom:1rem}
+
+    /* Contact */
+    .contact{
+      display:grid;grid-template-columns:1fr 1fr;gap:1rem;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+    .panel .cover{
+      height:180px;
+      background:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      border-bottom:1px solid var(--line);
+    }
+    .panel .body{padding:1rem}
+    .panel ul{list-style:none;margin-top:.6rem}
+    .panel li{
+      color:var(--muted);
+      padding:.5rem 0;border-bottom:1px dashed rgba(255,255,255,.12);
+    }
+
+    form{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      padding:1rem;
+    }
+    .field{margin-bottom:.82rem}
+    label{
+      display:block;margin-bottom:.35rem;
+      color:#cfdaf1;font-size:.86rem;
+    }
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      background:#111a31;
+      color:#edf2ff;
+      border-radius:10px;
+      padding:.66rem .74rem;
+      font:inherit;outline:none;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:rgba(199,167,106,.7);
+      box-shadow:0 0 0 3px rgba(199,167,106,.18);
+    }
+    textarea{min-height:110px;resize:vertical}
+
+    .notice{
+      margin-top:.7rem;
+      display:none;
+      padding:.65rem .75rem;border-radius:10px;
+      border:1px solid rgba(34,197,94,.35);
+      background:rgba(34,197,94,.12);
+      color:#bbf7d0;font-size:.9rem;
+    }
+
+    footer{
+      margin-top:1rem;
+      padding:2rem 0 2.5rem;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-size:.9rem;
+    }
+    .foot{
+      display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid,.grid-3,.team-grid,.contact{grid-template-columns:1fr 1fr}
+      .hero-grid{grid-template-columns:1fr}
+      .hero-right{min-height:380px}
+      .trust-grid{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 760px){
+      nav.menu{
+        position:absolute;left:0;right:0;top:76px;
+        background:rgba(15,23,40,.98);
+        border-bottom:1px solid var(--line);
+        display:none;flex-direction:column;padding:.85rem 1rem 1rem;
+      }
+      nav.menu.show{display:flex}
+      .menu-toggle{display:inline-grid;place-items:center}
+      .actions .btn-outline{display:none}
+      .grid-3,.team-grid,.contact,.trust-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">Atención confidencial • Cobertura nacional • Consultas presenciales y virtuales</div>
+
+  <header>
+    <div class="container nav">
+      <a href="#" class="brand">
+        <span class="crest">V</span>
+        <span>
+          Valentia Abogados
+          <small>Firma Legal</small>
+        </span>
+      </a>
+
+      <nav id="menu" class="menu">
+        <a href="#firma">La Firma</a>
+        <a href="#areas">Áreas de práctica</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+
+      <div class="actions">
+        <a href="#" class="btn btn-outline">Portal Clientes</a>
+        <a href="#contacto" class="btn btn-gold">Solicitar consulta</a>
+        <button id="menuToggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="firma">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <span class="kicker">⚖️ Excelencia jurídica con enfoque estratégico</span>
+          <h1>Asesoría legal integral para empresas, directivos y patrimonio</h1>
+          <p>
+            En Valentia Abogados combinamos rigor técnico, experiencia litigiosa y visión de negocio
+            para proteger los intereses de nuestros clientes en entornos regulatorios complejos.
+          </p>
+
+          <div class="hero-cta">
+            <a class="btn btn-gold" href="#contacto">Agendar primera reunión</a>
+            <a class="btn btn-outline" href="#areas">Ver áreas de práctica</a>
+          </div>
+
+          <div class="mini">
+            <span>✔ +20 años de trayectoria</span>
+            <span>✔ Equipo multidisciplinario</span>
+            <span>✔ Respuesta en 24h hábiles</span>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-card">
+            <h4>Compromiso institucional</h4>
+            <p>
+              Representación legal sólida, ética profesional y estrategias personalizadas
+              para prevenir riesgos y resolver controversias de alta complejidad.
+            </p>
+            <div class="hero-tags">
+              <span class="tag">Derecho Corporativo</span>
+              <span class="tag">Litigio</span>
+              <span class="tag">Compliance</span>
+              <span class="tag">Laboral</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust">
+      <div class="container trust-grid">
+        <article class="trust-item"><strong>+1,200</strong><span>Asuntos atendidos</span></article>
+        <article class="trust-item"><strong>92%</strong><span>Tasa de retención de clientes</span></article>
+        <article class="trust-item"><strong>48h</strong><span>Tiempo medio de diagnóstico inicial</span></article>
+        <article class="trust-item"><strong>Top Tier</strong><span>Reconocimiento en directorios legales</span></article>
+      </div>
+    </section>
+
+    <section id="areas">
+      <div class="container">
+        <div class="head">
+          <h2>Áreas de práctica</h2>
+          <p>Asesoramos de forma preventiva y contenciosa en los ámbitos críticos de tu operación.</p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="card-body">
+              <div class="icon">01</div>
+              <h3>Derecho Corporativo & M&A</h3>
+              <p>Constitución societaria, gobierno corporativo, fusiones, adquisiciones, due diligence y pactos entre accionistas.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="card-body">
+              <div class="icon">02</div>
+              <h3>Fiscal & Patrimonial</h3>
+              <p>Planeación fiscal estratégica, defensa ante autoridad y estructuras patrimoniales para continuidad empresarial.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="card-body">
+              <div class="icon">03</div>
+              <h3>Laboral Empresarial</h3>
+              <p>Contratación, relaciones colectivas, auditorías laborales, cumplimiento normativo y litigio individual/colectivo.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="card-body">
+              <div class="icon">04</div>
+              <h3>Litigio Civil & Mercantil</h3>
+              <p>Representación en controversias contractuales, recuperación de cartera, medidas cautelares y arbitraje.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="card-body">
+              <div class="icon">05</div>
+              <h3>Compliance & Riesgo Penal</h3>
+              <p>Programas de cumplimiento, matrices de riesgo, investigaciones internas y protocolos anticorrupción.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="card-body">
+              <div class="icon">06</div>
+              <h3>Inmobiliario & Urbanístico</h3>
+              <p>Operaciones de compraventa, arrendamientos complejos, regularización y estructuración de proyectos.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="equipo">
+      <div class="container">
+        <div class="head">
+          <h2>Socios y equipo directivo</h2>
+          <p>Profesionales con experiencia en firmas líderes y asuntos de alta exposición.</p>
+        </div>
+
+        <div class="team-grid">
+          <article class="member">
+            <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80')"></div>
+            <div class="info">
+              <h4>Dr. Alejandro Vázquez</h4>
+              <small>Socio Director · Corporativo & M&A</small>
+              <p>Especialista en estructuración societaria y transacciones complejas para grupos empresariales regionales.</p>
+            </div>
+          </article>
+
+          <article class="member">
+            <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=80')"></div>
+            <div class="info">
+              <h4>Dra. Lucía Ferrer</h4>
+              <small>Socia · Litigio Estratégico</small>
+              <p>Representación en disputas civiles y mercantiles con enfoque en resultados y protección reputacional.</p>
+            </div>
+          </article>
+
+          <article class="member">
+            <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80')"></div>
+            <div class="info">
+              <h4>Mtro. Gabriel Rojas</h4>
+              <small>Socio · Fiscal & Compliance</small>
+              <p>Diseño de estrategias preventivas, gestión de riesgo regulatorio y defensa técnica ante contingencias.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <article class="band">
+          <div>
+            <h3>Resolvemos problemas legales complejos con visión de negocio</h3>
+            <p>
+              Nuestro enfoque combina análisis jurídico profundo, estrategia procesal y acompañamiento cercano
+              para proteger tus decisiones corporativas en cada etapa.
+            </p>
+            <a href="#contacto" class="btn btn-gold">Hablar con un especialista</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container contact">
+        <article class="panel">
+          <div class="cover"></div>
+          <div class="body">
+            <h3 style="margin-bottom:.45rem;">Primera consulta institucional</h3>
+            <p style="color:var(--muted);line-height:1.6">
+              Cuéntanos tu situación y uno de nuestros especialistas te contactará para una evaluación inicial.
+            </p>
+            <ul>
+              <li>Atención a empresas, family offices y alta dirección.</li>
+              <li>Modalidad presencial o videoconferencia.</li>
+              <li>Confidencialidad y reserva profesional garantizadas.</li>
+            </ul>
+          </div>
+        </article>
+
+        <form id="contactForm">
+          <div class="field">
+            <label for="nombre">Nombre completo</label>
+            <input id="nombre" name="nombre" required placeholder="Tu nombre" />
+          </div>
+
+          <div class="field">
+            <label for="empresa">Empresa / Institución</label>
+            <input id="empresa" name="empresa" placeholder="Nombre de empresa (opcional)" />
+          </div>
+
+          <div class="field">
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" required placeholder="nombre@dominio.com" />
+          </div>
+
+          <div class="field">
+            <label for="telefono">Teléfono</label>
+            <input id="telefono" name="telefono" placeholder="+52 ..." />
+          </div>
+
+          <div class="field">
+            <label for="area">Área de interés</label>
+            <select id="area" name="area" required>
+              <option value="">Selecciona un área</option>
+              <option>Corporativo & M&A</option>
+              <option>Fiscal & Patrimonial</option>
+              <option>Laboral Empresarial</option>
+              <option>Litigio Civil & Mercantil</option>
+              <option>Compliance & Riesgo Penal</option>
+              <option>Inmobiliario & Urbanístico</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="mensaje">Resumen del asunto</label>
+            <textarea id="mensaje" name="mensaje" required placeholder="Comparte una breve descripción de tu caso"></textarea>
+          </div>
+
+          <button class="btn btn-gold" type="submit">Enviar solicitud</button>
+          <div id="notice" class="notice">✅ Gracias. Hemos recibido tu solicitud y te contactaremos en breve.</div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <span>© <span id="year"></span> Valentia Abogados. Todos los derechos reservados.</span>
+      <span>Ética profesional • Confidencialidad • Excelencia jurídica</span>
+    </div>
+  </footer>
+
+  <script>
+    // Año dinámico
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Menú móvil
+    const menu = document.getElementById("menu");
+    const menuToggle = document.getElementById("menuToggle");
+
+    menuToggle.addEventListener("click", () => {
+      menu.classList.toggle("show");
+    });
+
+    menu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => menu.classList.remove("show"));
+    });
+
+    // Formulario (simulación frontend)
+    const form = document.getElementById("contactForm");
+    const notice = document.getElementById("notice");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      console.log("Solicitud legal:", data);
+
+      notice.style.display = "block";
+      form.reset();
+
+      setTimeout(() => {
+        notice.style.display = "none";
+      }, 5000);
+    });
+  </script>
+  <script>
+    (function () {
+      const style = document.createElement("style");
+      style.textContent = ""
+        + ".legal-popup-overlay{position:fixed;inset:0;background:rgba(2,6,16,.68);display:grid;place-items:center;padding:1rem;z-index:9999;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}" 
+        + ".legal-popup-overlay.is-visible{opacity:1;visibility:visible}" 
+        + ".legal-popup{width:min(100%,34rem);background:#f6efe3;color:#1b1714;border:1px solid rgba(47,39,34,.25);border-radius:14px;padding:1rem 1rem .9rem;box-shadow:0 20px 40px rgba(0,0,0,.35)}" 
+        + ".legal-popup h2{margin:0 0 .45rem;font-size:1.08rem;line-height:1.3}" 
+        + ".legal-popup p{margin:0;color:#3f362f;line-height:1.55;font-size:.96rem}" 
+        + ".legal-popup-actions{margin-top:.9rem;display:flex;justify-content:flex-end}" 
+        + ".legal-popup-close{border:1px solid rgba(47,39,34,.3);background:#fff8ec;color:#1b1714;border-radius:10px;padding:.5rem .8rem;font:inherit;cursor:pointer}";
+      document.head.appendChild(style);
+
+      const overlay = document.createElement("div");
+      overlay.className = "legal-popup-overlay";
+      overlay.innerHTML = ""
+        + "<section class=\"legal-popup\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"legalPopupTitle\">"
+        + "<h2 id=\"legalPopupTitle\">Aviso de confidencialidad</h2>"
+        + "<p>Todo el contenido de esta pagina es ficticio y se presenta solo con fines demostrativos. Por acuerdos de confidencialidad (NDA), no se publican marcas, datos ni activos reales de clientes. Esta es una plantilla similar al tipo de solucion implementada.</p>"
+        + "<div class=\"legal-popup-actions\"><button type=\"button\" class=\"legal-popup-close\">Entendido</button></div>"
+        + "</section>";
+      document.body.appendChild(overlay);
+
+      const closeButton = overlay.querySelector(".legal-popup-close");
+      const dialog = overlay.querySelector(".legal-popup");
+
+      function closePopup() {
+        overlay.classList.remove("is-visible");
+      }
+
+      closeButton.addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (event) {
+        if (event.target === overlay) closePopup();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closePopup();
+      });
+
+      window.requestAnimationFrame(function () {
+        overlay.classList.add("is-visible");
+        closeButton.focus();
+      });
+
+      if (dialog) {
+        dialog.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+      }
+    })();
+  </script>
+  <script src="../js/projects-i18n.js"></script>
+</body>
+</html>

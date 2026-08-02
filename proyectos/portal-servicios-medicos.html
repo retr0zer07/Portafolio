@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediCore+ | Portal de Servicios Médicos</title>
+  <meta name="description" content="Portal de servicios médicos con triaje digital, agenda de especialistas, resultados y teleconsulta." />
+  <style>
+    :root{
+      --bg:#f4f8fb;
+      --paper:#ffffff;
+      --ink:#163047;
+      --muted:#5f788f;
+      --line:#dbe7f0;
+      --primary:#0ea5e9;
+      --primary-2:#0284c7;
+      --teal:#14b8a6;
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --radius:16px;
+      --shadow:0 10px 30px rgba(10,35,66,.1);
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1000px 400px at 100% -10%, #d7f0ff 0%, transparent 55%),
+        radial-gradient(900px 360px at -10% 0%, #dbfff7 0%, transparent 55%),
+        var(--bg);
+      color:var(--ink);
+      scroll-behavior:smooth;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{width:min(100% - 2rem, var(--max));margin-inline:auto}
+
+    /* Layout general diferente:
+       - Aside lateral fijo (desktop)
+       - Contenido principal en paneles tipo portal */
+    .app{
+      display:grid;
+      grid-template-columns:260px 1fr;
+      min-height:100vh;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      border-right:1px solid var(--line);
+      background:linear-gradient(180deg,#0c2236,#12324b);
+      color:#e8f4ff;
+      padding:1rem;
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+    }
+
+    .brand{
+      display:flex;align-items:center;gap:.65rem;
+      margin-bottom:1rem;
+      padding:.55rem .45rem;
+      border-radius:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      display:grid;place-items:center;font-weight:800;
+      background:linear-gradient(135deg,var(--primary),var(--teal));
+      box-shadow:0 8px 20px rgba(14,165,233,.35);
+    }
+    .brand h1{font-size:1rem;line-height:1}
+    .brand small{font-size:.72rem;color:#b8d8ee}
+
+    .side-group{margin-top:1rem}
+    .side-title{
+      font-size:.72rem;
+      text-transform:uppercase;
+      letter-spacing:.9px;
+      color:#9dc1dc;
+      margin:0 .45rem .45rem;
+    }
+    .side-nav a{
+      display:flex;align-items:center;gap:.55rem;
+      padding:.62rem .65rem;
+      border-radius:10px;
+      color:#d5e8f7;
+      font-size:.9rem;
+      margin-bottom:.3rem;
+      border:1px solid transparent;
+      transition:.2s ease;
+    }
+    .side-nav a:hover,
+    .side-nav a.active{
+      background:rgba(255,255,255,.09);
+      border-color:rgba(255,255,255,.18);
+      color:#fff;
+    }
+    .pill-status{
+      margin-top:1rem;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(20,184,166,.16);
+      color:#d3fff8;
+      padding:.65rem .7rem;
+      border-radius:12px;
+      font-size:.82rem;
+      line-height:1.4;
+    }
+
+    /* Main */
+    .main{
+      padding:1rem;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:1rem;
+      margin-bottom:1rem;
+      flex-wrap:wrap;
+    }
+
+    .welcome h2{font-size:1.45rem;margin-bottom:.25rem}
+    .welcome p{color:var(--muted)}
+
+    .top-actions{
+      display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;
+    }
+
+    .search{
+      display:flex;align-items:center;gap:.45rem;
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:12px;
+      padding:.52rem .7rem;
+      min-width:250px;
+      box-shadow:var(--shadow);
+    }
+    .search input{
+      border:0;outline:none;background:transparent;width:100%;
+      font:inherit;color:var(--ink);
+    }
+
+    .btn{
+      border:1px solid transparent;
+      border-radius:11px;
+      padding:.62rem .92rem;
+      font-size:.88rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:.2s ease;
+      display:inline-flex;align-items:center;gap:.45rem;
+    }
+    .btn-outline{background:var(--paper);border-color:var(--line);color:var(--ink)}
+    .btn-outline:hover{background:#f7fbff}
+    .btn-primary{
+      color:#fff;background:linear-gradient(180deg,var(--primary),var(--primary-2));
+      box-shadow:0 10px 20px rgba(2,132,199,.25);
+    }
+    .btn-primary:hover{transform:translateY(-1px)}
+
+    /* Grid del portal (mosaico distinto a "landing") */
+    .portal-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:1rem;
+    }
+
+    .stack{display:grid;gap:1rem}
+    .card{
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-head{
+      padding:.9rem 1rem;
+      border-bottom:1px solid var(--line);
+      display:flex;justify-content:space-between;align-items:center;gap:.7rem;
+      flex-wrap:wrap;
+    }
+    .card-head h3{font-size:1rem}
+    .card-head small{color:var(--muted)}
+
+    .card-body{padding:1rem}
+
+    /* HERO CLÍNICO INTERNO */
+    .clinical-hero{
+      min-height:230px;
+      position:relative;
+      background:
+        linear-gradient(110deg, rgba(8,32,53,.76), rgba(8,32,53,.35)),
+        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      color:#f2fbff;
+      display:flex;
+      align-items:flex-end;
+      padding:1rem;
+    }
+    .clinical-hero .box{
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.11);
+      backdrop-filter:blur(3px);
+      border-radius:12px;
+      padding:.7rem .8rem;
+      max-width:540px;
+    }
+    .clinical-hero h3{margin-bottom:.35rem;font-size:1.05rem}
+    .clinical-hero p{font-size:.88rem;color:#ddf3ff;line-height:1.45}
+
+    /* KPI cards */
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:.7rem;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:.78rem;
+      background:linear-gradient(180deg,#fff,#f8fcff);
+    }
+    .kpi strong{display:block;font-size:1.12rem}
+    .kpi span{font-size:.8rem;color:var(--muted)}
+    .trend{font-size:.76rem;margin-top:.25rem;display:inline-block;padding:.2rem .45rem;border-radius:999px}
+    .up{background:rgba(22,163,74,.12);color:var(--ok)}
+    .flat{background:rgba(245,158,11,.14);color:#9a6705}
+
+    /* Agenda horizontal */
+    .timeline{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:.7rem;
+    }
+    .slot{
+      border:1px dashed #b7d2e6;
+      background:#f8fcff;
+      border-radius:12px;
+      padding:.72rem;
+    }
+    .slot b{display:block;font-size:.85rem;margin-bottom:.28rem}
+    .slot span{display:block;color:var(--muted);font-size:.82rem}
+    .slot .tag{
+      margin-top:.45rem;
+      display:inline-block;
+      font-size:.74rem;
+      padding:.2rem .45rem;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+
+    /* Especialistas cards verticales */
+    .doctors{
+      display:grid;
+      gap:.7rem;
+    }
+    .doctor{
+      display:grid;
+      grid-template-columns:56px 1fr auto;
+      gap:.65rem;
+      align-items:center;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:.55rem;
+      background:#fbfeff;
+    }
+    .doctor img{
+      width:56px;height:56px;border-radius:12px;object-fit:cover;
+    }
+    .doctor h4{font-size:.9rem}
+    .doctor p{font-size:.8rem;color:var(--muted)}
+    .badge{
+      font-size:.72rem;padding:.2rem .42rem;border-radius:999px;border:1px solid var(--line);background:#fff;
+    }
+    .ok-b{color:var(--ok);border-color:rgba(22,163,74,.3);background:rgba(22,163,74,.08)}
+    .warn-b{color:#a16207;border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.12)}
+
+    /* Servicios con imagen */
+    .services{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:.7rem;
+    }
+    .service{
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .service .thumb{
+      height:110px;
+      background-size:cover;background-position:center;
+    }
+    .service .txt{padding:.7rem}
+    .service h4{font-size:.9rem;margin-bottom:.2rem}
+    .service p{font-size:.8rem;color:var(--muted);line-height:1.45}
+
+    /* Resultados/estudios */
+    .results-list{display:grid;gap:.55rem}
+    .result-item{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:.6rem .7rem;
+      display:flex;justify-content:space-between;align-items:center;gap:.6rem;
+      flex-wrap:wrap;
+      background:#fcfeff;
+    }
+    .result-item b{font-size:.87rem}
+    .result-item small{color:var(--muted)}
+    .state{
+      font-size:.73rem;padding:.2rem .45rem;border-radius:999px;border:1px solid var(--line);
+    }
+    .ready{background:rgba(22,163,74,.1);color:var(--ok);border-color:rgba(22,163,74,.28)}
+    .process{background:rgba(245,158,11,.12);color:#a16207;border-color:rgba(245,158,11,.3)}
+
+    /* Banner inferior */
+    .cta{
+      margin-top:1rem;
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:
+        linear-gradient(105deg, rgba(5,52,82,.78), rgba(5,52,82,.52)),
+        url('https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      color:#e9f7ff;
+      min-height:170px;
+      display:flex;align-items:center;
+      padding:1rem;
+      box-shadow:var(--shadow);
+    }
+    .cta h3{font-size:1.2rem;margin-bottom:.35rem}
+    .cta p{color:#d5eefc;max-width:66ch;line-height:1.55;margin-bottom:.7rem}
+
+    /* Mobile */
+    .mobile-top{
+      display:none;
+      margin-bottom:.8rem;
+    }
+    .menu-btn{
+      width:40px;height:40px;border-radius:10px;border:1px solid var(--line);
+      background:#fff;cursor:pointer;
+    }
+
+    @media (max-width: 1040px){
+      .app{grid-template-columns:1fr}
+      .sidebar{
+        position:fixed;left:-280px;top:0;width:260px;z-index:120;transition:.25s ease;
+      }
+      .sidebar.open{left:0}
+      .mobile-top{display:flex;justify-content:space-between;align-items:center}
+      .portal-grid{grid-template-columns:1fr}
+      .kpis{grid-template-columns:repeat(2,1fr)}
+      .timeline{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media (max-width: 640px){
+      .search{min-width:unset;width:100%}
+      .top-actions{width:100%}
+      .kpis,.timeline,.services{grid-template-columns:1fr}
+      .doctor{grid-template-columns:56px 1fr}
+      .doctor .badge{grid-column:1/-1;justify-self:start}
+    }
+
+    /* Overlay */
+    .overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.35);
+      opacity:0;pointer-events:none;transition:.2s;z-index:110;
+    }
+    .overlay.show{opacity:1;pointer-events:auto}
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar">
+      <a href="#" class="brand">
+        <span class="logo">M+</span>
+        <span>
+          <h1>MediCore+</h1>
+          <small>Portal de Salud Integral</small>
+        </span>
+      </a>
+
+      <div class="side-group">
+        <p class="side-title">Navegación clínica</p>
+        <nav class="side-nav">
+          <a class="active" href="#dashboard">🏥 Dashboard</a>
+          <a href="#agenda">📅 Agenda Médica</a>
+          <a href="#especialistas">👩‍⚕️ Especialistas</a>
+          <a href="#servicios">🧪 Servicios</a>
+          <a href="#resultados">📄 Resultados</a>
+          <a href="#telemedicina">💻 Telemedicina</a>
+        </nav>
+      </div>
+
+      <div class="side-group">
+        <p class="side-title">Paciente</p>
+        <nav class="side-nav">
+          <a href="#">🪪 Mi perfil</a>
+          <a href="#">💳 Cobertura / Seguro</a>
+          <a href="#">🔔 Recordatorios</a>
+          <a href="#">⚙️ Configuración</a>
+        </nav>
+      </div>
+
+      <div class="pill-status">
+        <strong>Estado del sistema:</strong> Operativo<br/>
+        Tiempos de espera promedio: <strong>12 min</strong>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="mobile-top">
+        <button id="menuBtn" class="menu-btn" aria-label="Abrir menú">☰</button>
+        <strong>MediCore+</strong>
+      </div>
+
+      <header class="topbar" id="dashboard">
+        <div class="welcome">
+          <h2>Portal de Servicios Médicos</h2>
+          <p>Gestiona citas, especialistas, resultados y teleconsultas desde un solo lugar.</p>
+        </div>
+
+        <div class="top-actions">
+          <label class="search">
+            🔍
+            <input id="searchInput" type="text" placeholder="Buscar especialidad, médico o estudio..." />
+          </label>
+          <button class="btn btn-outline">Notificaciones</button>
+          <button class="btn btn-primary">Agendar cita</button>
+        </div>
+      </header>
+
+      <section class="portal-grid">
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="stack">
+          <article class="card">
+            <div class="clinical-hero">
+              <div class="box">
+                <h3>Atención médica híbrida y centrada en el paciente</h3>
+                <p>Acceso a red de especialistas, diagnóstico preventivo y seguimiento digital continuo.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <h3>Indicadores de Atención</h3>
+              <small>Actualizado hace 2 min</small>
+            </div>
+            <div class="card-body">
+              <div class="kpis">
+                <div class="kpi">
+                  <strong>1,284</strong>
+                  <span>Pacientes activos</span><br/>
+                  <em class="trend up">+8% semanal</em>
+                </div>
+                <div class="kpi">
+                  <strong>96%</strong>
+                  <span>Satisfacción general</span><br/>
+                  <em class="trend up">Excelente</em>
+                </div>
+                <div class="kpi">
+                  <strong>12 min</strong>
+                  <span>Espera promedio</span><br/>
+                  <em class="trend flat">Estable</em>
+                </div>
+                <div class="kpi">
+                  <strong>342</strong>
+                  <span>Teleconsultas mes</span><br/>
+                  <em class="trend up">+14%</em>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" id="agenda">
+            <div class="card-head">
+              <h3>Agenda de Hoy</h3>
+              <small>Turnos priorizados por triaje</small>
+            </div>
+            <div class="card-body">
+              <div class="timeline">
+                <div class="slot">
+                  <b>09:00 - 10:00</b>
+                  <span>Medicina General</span>
+                  <span class="tag">4 pacientes</span>
+                </div>
+                <div class="slot">
+                  <b>10:30 - 11:30</b>
+                  <span>Cardiología</span>
+                  <span class="tag">2 pacientes</span>
+                </div>
+                <div class="slot">
+                  <b>12:00 - 13:00</b>
+                  <span>Pediatría</span>
+                  <span class="tag">5 pacientes</span>
+                </div>
+                <div class="slot">
+                  <b>16:00 - 17:00</b>
+                  <span>Dermatología</span>
+                  <span class="tag">3 pacientes</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- COLUMNA DERECHA -->
+        <div class="stack">
+          <article class="card" id="especialistas">
+            <div class="card-head">
+              <h3>Especialistas Disponibles</h3>
+              <small>Próxima ventana: 30 min</small>
+            </div>
+            <div class="card-body">
+              <div class="doctors" id="doctorsList">
+                <div class="doctor">
+                  <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Doctora">
+                  <div>
+                    <h4>Dra. Valeria Núñez</h4>
+                    <p>Cardiología • 12 años exp.</p>
+                  </div>
+                  <span class="badge ok-b">Disponible</span>
+                </div>
+                <div class="doctor">
+                  <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="Doctor">
+                  <div>
+                    <h4>Dr. Andrés Lozano</h4>
+                    <p>Pediatría • 9 años exp.</p>
+                  </div>
+                  <span class="badge warn-b">Alta demanda</span>
+                </div>
+                <div class="doctor">
+                  <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Doctora">
+                  <div>
+                    <h4>Dra. Camila Ortega</h4>
+                    <p>Dermatología • 11 años exp.</p>
+                  </div>
+                  <span class="badge ok-b">Disponible</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" id="servicios">
+            <div class="card-head">
+              <h3>Servicios Médicos</h3>
+              <small>Prevención, diagnóstico y seguimiento</small>
+            </div>
+            <div class="card-body">
+              <div class="services">
+                <div class="service">
+                  <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=900&q=80')"></div>
+                  <div class="txt">
+                    <h4>Chequeo Ejecutivo</h4>
+                    <p>Evaluación integral anual con laboratorio e imagen.</p>
+                  </div>
+                </div>
+                <div class="service">
+                  <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1579165466741-7f35e4755660?auto=format&fit=crop&w=900&q=80')"></div>
+                  <div class="txt">
+                    <h4>Telemedicina</h4>
+                    <p>Consulta virtual segura con receta y seguimiento.</p>
+                  </div>
+                </div>
+                <div class="service">
+                  <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=900&q=80')"></div>
+                  <div class="txt">
+                    <h4>Imagen Diagnóstica</h4>
+                    <p>Ultrasonido, RX y estudios especializados.</p>
+                  </div>
+                </div>
+                <div class="service">
+                  <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80')"></div>
+                  <div class="txt">
+                    <h4>Laboratorio Clínico</h4>
+                    <p>Resultados digitales y trazabilidad en tiempo real.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" id="resultados">
+            <div class="card-head">
+              <h3>Resultados Recientes</h3>
+              <small>Centro de estudios del paciente</small>
+            </div>
+            <div class="card-body">
+              <div class="results-list">
+                <div class="result-item">
+                  <div>
+                    <b>Biometría Hemática</b><br/>
+                    <small>Actualizado hoy • 08:40</small>
+                  </div>
+                  <span class="state ready">Disponible</span>
+                </div>
+                <div class="result-item">
+                  <div>
+                    <b>Perfil Lipídico</b><br/>
+                    <small>Actualizado ayer • 16:20</small>
+                  </div>
+                  <span class="state ready">Disponible</span>
+                </div>
+                <div class="result-item">
+                  <div>
+                    <b>Ultrasonido Abdominal</b><br/>
+                    <small>En validación médica</small>
+                  </div>
+                  <span class="state process">En proceso</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta" id="telemedicina">
+        <div>
+          <h3>Consulta virtual inmediata con especialistas certificados</h3>
+          <p>
+            Activa una teleconsulta en minutos, comparte tus estudios desde el portal
+            y recibe indicaciones médicas con seguimiento digital.
+          </p>
+          <button class="btn btn-primary">Iniciar teleconsulta</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar móvil
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    if(menuBtn){
+      menuBtn.addEventListener("click", () => {
+        sidebar.classList.add("open");
+        overlay.classList.add("show");
+      });
+    }
+
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+
+    // Filtro simple de especialistas por búsqueda
+    const searchInput = document.getElementById("searchInput");
+    const doctorsList = document.getElementById("doctorsList");
+    const doctors = Array.from(doctorsList.querySelectorAll(".doctor"));
+
+    searchInput.addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+
+      doctors.forEach(doc => {
+        const text = doc.innerText.toLowerCase();
+        doc.style.display = text.includes(q) ? "grid" : "none";
+      });
+    });
+
+    // Resaltar item activo en sidebar por click
+    document.querySelectorAll(".side-nav a").forEach(link => {
+      link.addEventListener("click", () => {
+        document.querySelectorAll(".side-nav a").forEach(a => a.classList.remove("active"));
+        link.classList.add("active");
+
+        // Cerrar sidebar en móvil al navegar
+        if(window.innerWidth <= 1040){
+          sidebar.classList.remove("open");
+          overlay.classList.remove("show");
+        }
+      });
+    });
+  </script>
+  <script>
+    (function () {
+      const style = document.createElement("style");
+      style.textContent = ""
+        + ".legal-popup-overlay{position:fixed;inset:0;background:rgba(2,6,16,.68);display:grid;place-items:center;padding:1rem;z-index:9999;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}" 
+        + ".legal-popup-overlay.is-visible{opacity:1;visibility:visible}" 
+        + ".legal-popup{width:min(100%,34rem);background:#f6efe3;color:#1b1714;border:1px solid rgba(47,39,34,.25);border-radius:14px;padding:1rem 1rem .9rem;box-shadow:0 20px 40px rgba(0,0,0,.35)}" 
+        + ".legal-popup h2{margin:0 0 .45rem;font-size:1.08rem;line-height:1.3}" 
+        + ".legal-popup p{margin:0;color:#3f362f;line-height:1.55;font-size:.96rem}" 
+        + ".legal-popup-actions{margin-top:.9rem;display:flex;justify-content:flex-end}" 
+        + ".legal-popup-close{border:1px solid rgba(47,39,34,.3);background:#fff8ec;color:#1b1714;border-radius:10px;padding:.5rem .8rem;font:inherit;cursor:pointer}";
+      document.head.appendChild(style);
+
+      const overlay = document.createElement("div");
+      overlay.className = "legal-popup-overlay";
+      overlay.innerHTML = ""
+        + "<section class=\"legal-popup\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"legalPopupTitle\">"
+        + "<h2 id=\"legalPopupTitle\">Aviso de confidencialidad</h2>"
+        + "<p>Todo el contenido de esta pagina es ficticio y se presenta solo con fines demostrativos. Por acuerdos de confidencialidad (NDA), no se publican marcas, datos ni activos reales de clientes. Esta es una plantilla similar al tipo de solucion implementada.</p>"
+        + "<div class=\"legal-popup-actions\"><button type=\"button\" class=\"legal-popup-close\">Entendido</button></div>"
+        + "</section>";
+      document.body.appendChild(overlay);
+
+      const closeButton = overlay.querySelector(".legal-popup-close");
+      const dialog = overlay.querySelector(".legal-popup");
+
+      function closePopup() {
+        overlay.classList.remove("is-visible");
+      }
+
+      closeButton.addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (event) {
+        if (event.target === overlay) closePopup();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closePopup();
+      });
+
+      window.requestAnimationFrame(function () {
+        overlay.classList.add("is-visible");
+        closeButton.focus();
+      });
+
+      if (dialog) {
+        dialog.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+      }
+    })();
+  </script>
+  <script src="../js/projects-i18n.js"></script>
+</body>
+</html>
